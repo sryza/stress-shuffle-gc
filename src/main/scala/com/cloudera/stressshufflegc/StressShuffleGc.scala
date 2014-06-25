@@ -24,11 +24,11 @@ import org.apache.spark.SparkConf
 
 import scala.util.Random
 
-case class SomeObject(val name: String, num1: Int, num2: Int)
+case class SomeObject(num1: Int, num2: Double, num3: Long)
 
 object StressShuffleGc {
   def main(args: Array[String]) {
-    val sc = new SparkContext(new SparkConf().setAppName("Spark Count"))
+    val sc = new SparkContext(new SparkConf().setAppName("Stress Shuffle GC"))
 
     val numMappers = args(0).toInt
     val numUniqueKeys = args(1).toInt
@@ -47,7 +47,7 @@ object StressShuffleGc {
       TraversableOnce[(Integer, SomeObject)] = {
     val rand = new Random(seed)
     for (i <- 0 until numRecords) yield {
-      val randObject = SomeObject(rand.nextString(20), rand.nextInt(), rand.nextInt())
+      val randObject = SomeObject(rand.nextInt(), rand.nextDouble(), rand.nextLong())
       val randKey = rand.nextInt(numUniqueKeys)
       (new Integer(randKey), randObject)
     }
